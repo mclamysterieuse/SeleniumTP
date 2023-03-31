@@ -2,11 +2,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+
+import java.time.Duration;
 
 
 public class TestAmazon {
@@ -24,6 +27,8 @@ public class TestAmazon {
     @Test
 
     public void testAmazon2() {
+
+        final int TIMEOUT_SIDE_PANEL = 10;
         String Visible = "Passer la commande";
         String expectedTitle = "iPhone 13";
 
@@ -47,21 +52,12 @@ public class TestAmazon {
         driver.findElement(By.cssSelector("#add-to-cart-button")).click();
 
         // - click non merci
-        WebElement Nothanks = driver.findElement(By.cssSelector("#attachSiNoCoverage"));
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT_SIDE_PANEL));
+        WebElement Nothanks = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#attachSiNoCoverage")));
         Nothanks.click();
 
         // - click panier
-        WebElement Card = driver.findElement(By.cssSelector("#attach-sidesheet-view-cart-button"));
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        WebElement Card = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#attach-sidesheet-view-cart-button")));
         Card.click();
 
         //assert passer la commande visible
@@ -69,15 +65,10 @@ public class TestAmazon {
         Assert.assertTrue(searchRealVisible.isDisplayed(), "Payment button visible");
         String realResult = searchRealVisible.getText();
         Assert.assertEquals(realResult, Visible);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
        //- (optionnel) assert quantité
         WebElement searchRealQuantity = driver.findElement(By.cssSelector("#nav-cart-count"));
         String realResultQuantity = searchRealQuantity.getText();
         Assert.assertEquals(realResultQuantity, "1", "The quantity of phone on the card is equal");
     }
-
 }
