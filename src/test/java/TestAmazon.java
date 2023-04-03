@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-
 public class TestAmazon {
 
     WebDriver driver;
@@ -39,7 +38,7 @@ public class TestAmazon {
         driver.findElement(By.cssSelector("#sp-cc-accept")).click();
 
         // - saisir mot cle dans la barre de recherche "iphone 13"
-        driver.findElement(By.name("field-keywords")).sendKeys("iphone 13");
+        driver.findElement(By.cssSelector("#twotabsearchtextbox")).sendKeys("iphone 13");
         driver.findElement(By.cssSelector("#nav-search-submit-button")).click();
 
         //- click loupe and  premier article and   //- assert que mot cle "iphone 13" est present dans le titre du premier element
